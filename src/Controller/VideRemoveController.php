@@ -4,7 +4,7 @@ namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Repository\VideoRepository;
 
-class VideRemoveController
+class VideRemoveController implements Controller
 {
     public function __construct(private VideoRepository $videoRepository)
     {

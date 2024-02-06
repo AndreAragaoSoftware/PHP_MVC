@@ -5,7 +5,7 @@ namespace Andre\Mvc\Controller;
 use Andre\Mvc\Entity\Video;
 use Andre\Mvc\Repository\VideoRepository;
 
-class VideoNewController
+class VideoNewController implements Controller
 {
     public function __construct(private VideoRepository $videoRepository)
     {

@@ -3,9 +3,9 @@
 namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Repository\VideoRepository;
-use PDO;
 
-class VideoListController
+
+class VideoListController implements Controller
 {
 
 
