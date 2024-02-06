@@ -1,12 +1,26 @@
 <?php
 
-$pdo = new PDO('sqlite:D:\laragon\www\Alura\PHP\PHP_MVC\banco.sqlite');
-$repository = new Andre\Mvc\Repository\VideoRepository($pdo);
-$videoList = $repository->allVideo();
+namespace Andre\Mvc\Controller;
 
-?>
-<?php require_once 'inicio-html.php';?>
-    <ul class="videos__container">
+use Andre\Mvc\Repository\VideoRepository;
+use PDO;
+
+class VideoListController
+{
+
+
+    public function __construct(private VideoRepository $videoRepository)
+    {
+
+    }
+
+    public function processaRequisicao(): void
+    {
+        $videoList = $this->videoRepository->allVideo();
+        require_once __DIR__ . '/../../inicio-html.php'; ?>
+
+
+        <ul class="videos__container">
         <?php foreach ($videoList as $video): ?>
             <li class="videos__item">
                 <iframe width="100%" height="72%" src="<?= $video->url; ?>"
@@ -24,4 +38,6 @@ $videoList = $repository->allVideo();
             </li>
         <?php endforeach; ?>
     </ul>
-<?php require_once 'fim-html.php';?>
+<?php require_once __DIR__ . '/../../fim-html.php';
+    }
+}
