@@ -3,7 +3,7 @@
 $pdo = new PDO('sqlite:D:\laragon\www\Alura\PHP\PHP_MVC\banco.sqlite');
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-if ($id === false || $id !== null) {
+if ($id === false || $id === null) {
     header('Location: /?sucesso=0');
     exit();
 }
@@ -24,6 +24,12 @@ $statement = $pdo->prepare($sql);
 $statement->bindValue(':url', $url);
 $statement->bindValue(':title', $titulo);
 $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+$video = new \Andre\Mvc\Entity\Video($url, $titulo);
+$video->setId((int)$id);
+
+$repository = new \Andre\Mvc\Repository\VideoRepository($pdo);
+$repository->updateVideo($video);
 
 if ($statement->execute() === false) {
     header('Location: /?sucesso=0');

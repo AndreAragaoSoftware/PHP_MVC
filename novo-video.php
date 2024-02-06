@@ -13,13 +13,11 @@ if ($titulo === false){
     exit();
 }
 
-$sql = "INSERT INTO videos (url, title) VALUES (?,?);";
-$statement = $pdo->prepare($sql);
-$statement->bindValue(1, $url);
-$statement->bindValue(2, $titulo);
+
+$repository = new \Andre\Mvc\Repository\VideoRepository($pdo);
 
 
-if ($statement->execute() === false){
+if ($repository->addVideo(new \Andre\Mvc\Entity\Video($url, $titulo)) === false){
     header("Location: /?sucesso=0");
 }else {
     header("Location: /?sucesso=1");
