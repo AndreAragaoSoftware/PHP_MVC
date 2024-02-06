@@ -6,7 +6,7 @@ $video = [
     'url' => '',
     'title' => ''
 ];
-if($id !== false) {
+if($id !== false && $id !== null) {
     $statement = $pdo->prepare('SELECT * FROM videos WHERE id = ?;');
     $statement->bindValue(1, $id, PDO::PARAM_INT);
     $statement->execute();
@@ -41,7 +41,7 @@ if($id !== false) {
             <a class="logo" href="../index.php"></a>
 
             <div class="cabecalho__icones">
-                <a href="./enviar-video.html" class="cabecalho__videos"></a>
+                <a href="/novo-video" class="cabecalho__videos"></a>
                 <a href="../pages/login.html" class="cabecalho__sair">Sair</a>
             </div>
         </nav>
@@ -50,8 +50,7 @@ if($id !== false) {
 
     <main class="container">
 
-        <form class="container__formulario" method="post"
-              action="<?= $id !== false ? 'editar-video.php?id=' . $id : '/novo-video.php'; ?>"
+        <form class="container__formulario" method="post">
         <h2> class="formulario__titulo">Envie um vídeo!</h2>
                 <div class="formulario__campo">
                     <label class="campo__etiqueta" for="url">Link embed</label>
