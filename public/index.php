@@ -4,21 +4,21 @@
 declare(strict_types=1);
 
 use Andre\Mvc\Controller\Error404Controller;
+use Andre\Mvc\Controller\LoginController;
+use Andre\Mvc\Controller\Controller;
 use Andre\Mvc\Controller\VideoEditController;
 use Andre\Mvc\Controller\VideoFormController;
 use Andre\Mvc\Controller\VideoListController;
 use Andre\Mvc\Controller\VideoNewController;
 use Andre\Mvc\Controller\VideRemoveController;
-use Andre\Mvc\Controller\LoginController; // Adicionei a classe LoginController
-use Andre\Mvc\Controller\Controller;
 use Andre\Mvc\Repository\UserRepository;
 use Andre\Mvc\Repository\VideoRepository;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $pdo = new PDO('sqlite:D:\laragon\www\Alura\PHP\PHP_MVC\banco.sqlite');
-$videoRepository = new VideoRepository($pdo);
 $userRepository = new UserRepository($pdo);
+$videoRepository = new VideoRepository($pdo);
 
 /** @var Andre\Mvc\Controller\Controller $controller */
 
@@ -33,14 +33,12 @@ if (array_key_exists($key, $routes)) {
     $controllerClass = $routes["$httpMethod|$pathInfo"];
 
     if (class_exists($controllerClass)) {
-        if ($controllerClass === UserRepository::class) {
+        if ($controllerClass === UserRepository::class || $controllerClass === LoginController::class) {
             $controller = new $controllerClass($userRepository);
-        } elseif ($controllerClass === VideoRepository::class || $controllerClass === VideoListController::class) {
+        } elseif (in_array($controllerClass, [VideoListController::class, VideoFormController::class, VideoEditController::class, VideoNewController::class, VideRemoveController::class])) {
             $controller = new $controllerClass($videoRepository);
-        } elseif ($controllerClass === LoginController::class) {
-            $controller = new $controllerClass($userRepository);
         } else {
-            // Se não for um repositório ou VideoListController ou LoginController, instanciamos sem argumentos
+            // Se não for um UserRepository, VideoListController, VideoFormController, VideoEditController, VideoNewController, VideRemoveController ou LoginController, instanciamos sem argumentos
             $controller = new $controllerClass();
         }
     } else {
