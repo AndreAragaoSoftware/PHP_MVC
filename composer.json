@@ -3,5 +3,8 @@
     "psr-4": {
       "Andre\\Mvc\\": "src/"
     }
+  },
+  "require": {
+    "ext-pdo": "*"
   }
 }
