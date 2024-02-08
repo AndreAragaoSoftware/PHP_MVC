@@ -22,6 +22,7 @@ class UserRepository
         if ($userData) {
             // Verifica se a senha está correta
             if (password_verify($password, $userData['password'])) {
+                $_SESSION['logado'] = true;
                 // Senha correta, redireciona para a página principal
                 header('Location: /');
             } else {
