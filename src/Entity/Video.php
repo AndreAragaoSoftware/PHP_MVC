@@ -38,7 +38,7 @@ class Video
         $this->filePath = $filePath;
     }
 
-    public function getFilePaty(): ?string
+    public function getFilePath(): ?string
     {
         return $this->filePath;
     }

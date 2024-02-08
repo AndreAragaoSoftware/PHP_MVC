@@ -17,7 +17,7 @@ class VideoRepository
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(1, $video->url);
         $statement->bindValue(2, $video->title);
-        $statement->bindValue(3, $video->getFilePaty());
+        $statement->bindValue(3, $video->getFilePath());
 
         $result = $statement->execute();
 
@@ -36,24 +36,40 @@ class VideoRepository
 
     public function updateVideo(Video $video): bool
     {
-        $sql = 'UPDATE videos SET url = :url, title = :title WHERE id = :id;';
+        // teste para saber se foi a dcionado uma imagem no edita
+        $updateImageSql = '';
+        if ($video->getFilePath() !== null) {
+            $updateImageSql = ', imagem_path = :imagem_path';
+        }
+
+
+        $sql = "UPDATE videos SET
+                  url = :url,
+                  title = :title
+                                    $updateImageSql
+              WHERE id = :id;";
+
+
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':url', $video->url);
         $statement->bindValue(':title', $video->title);
         $statement->bindValue(':id', $video->id, PDO::PARAM_INT);
+
+        if($video->getFilePath() !== null) {
+            $statement->bindValue(':imagem_path', $video->getFilePath());
+        }
+
         return $statement->execute();
     }
 
     /** @return Video[] */
     public function allVideo(): array
     {
-        $videoList = $this->pdo->query('SELECT * FROM videos;')->fetchAll(PDO::FETCH_ASSOC);
-
-        return  array_map(function (array $videoData){
-            $video = new Video($videoData['url'], $videoData['title']);
-            $video->setId($videoData['id']);
-            return $video;
-        },
+        $videoList = $this->pdo
+            ->query('SELECT * FROM videos;')
+            ->fetchAll(\PDO::FETCH_ASSOC);
+        return array_map(
+            $this->hydrateVideo(...),
             $videoList
         );
     }
@@ -71,6 +87,9 @@ class VideoRepository
     {
         $video = new Video($videoData['url'], $videoData['title']);
         $video->setId($videoData['id']);
+        if($videoData['imagem_path'] !== null) {
+            $video->setFilePath($videoData['imagem_path']);
+        }
 
         return $video;
     }
