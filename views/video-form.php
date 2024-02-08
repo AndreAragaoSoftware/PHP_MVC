@@ -35,7 +35,6 @@ require_once __DIR__ . '/inicio-html.php';
                        accept="image/*"
                        type="file"
                        class="campo__escrita"
-                       required
                        id='image' />
             </div>
 
