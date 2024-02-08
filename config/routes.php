@@ -8,5 +8,6 @@ return [
     'POST|/editar-video' => \Andre\Mvc\Controller\VideoEditController::class,
     'GET|/remover-video' => \Andre\Mvc\Controller\VideRemoveController::class,
     'GET|/login' => \Andre\Mvc\Controller\LoginFormController::class,
-    'POST|/login' => \Andre\Mvc\Controller\LoginController::class
+    'POST|/login' => \Andre\Mvc\Controller\LoginController::class,
+    'GET|/logout' => \Andre\Mvc\Controller\LogoutController::class
 ];
