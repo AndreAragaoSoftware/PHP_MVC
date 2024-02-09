@@ -36,12 +36,34 @@ class VideoRepository
 
     public function removeCover(int $id): bool
     {
-        $sql = "UPDATE videos SET imagem_path = NULL WHERE id = ?";
+        // Primeiro, recuperamos o caminho do arquivo de imagem associado ao vídeo
+        $sql = 'SELECT imagem_path FROM videos WHERE id = ?';
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(1, $id);
-        return $statement->execute();
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
 
+        // Verifica se encontrou o registro com o ID fornecido
+        if ($result && isset($result['imagem_path'])) {
+            $imagemPath = $result['imagem_path'];
+
+            // Remove o arquivo de imagem da pasta de uploads
+            if ($imagemPath && file_exists(__DIR__ . '/../../public/img/uploads/' . $imagemPath)) {
+                unlink(__DIR__ . '/../../public/img/uploads/' . $imagemPath);
+            }
+
+            // Deleta a capa do vídeo do banco de dados
+            $deleteSql = 'UPDATE videos SET imagem_path = NULL WHERE id = ?';
+            $deleteStatement = $this->pdo->prepare($deleteSql);
+            $deleteStatement->bindValue(1, $id);
+            $deleteStatement->execute();
+
+            return true;
+        }
+
+        return false; // Retornar false se não foi possível encontrar o vídeo com o ID fornecido
     }
+
 
     public function updateVideo(Video $video): bool
     {
