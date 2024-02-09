@@ -10,6 +10,7 @@ use Andre\Mvc\Controller\VideoEditController;
 use Andre\Mvc\Controller\VideoFormController;
 use Andre\Mvc\Controller\VideoListController;
 use Andre\Mvc\Controller\VideoNewController;
+use Andre\Mvc\Controller\VideoRemoveCoverController;
 use Andre\Mvc\Controller\VideRemoveController;
 use Andre\Mvc\Repository\UserRepository;
 use Andre\Mvc\Repository\VideoRepository;
@@ -43,7 +44,14 @@ if (array_key_exists($key, $routes)) {
     if (class_exists($controllerClass)) {
         if ($controllerClass === UserRepository::class || $controllerClass === LoginController::class) {
             $controller = new $controllerClass($userRepository);
-        } elseif (in_array($controllerClass, [VideoListController::class, VideoFormController::class, VideoEditController::class, VideoNewController::class, VideRemoveController::class])) {
+        } elseif (in_array($controllerClass, [
+                VideoListController::class,
+                VideoFormController::class,
+                VideoEditController::class,
+                VideoNewController::class,
+                VideRemoveController::class,
+                VideoRemoveCoverController::class
+        ])) {
             $controller = new $controllerClass($videoRepository);
         } else {
             // Se não for um UserRepository, VideoListController, VideoFormController, VideoEditController, VideoNewController, VideRemoveController ou LoginController, instanciamos sem argumentos

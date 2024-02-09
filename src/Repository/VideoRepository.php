@@ -34,6 +34,15 @@ class VideoRepository
         return $statement->execute();
     }
 
+    public function removeCover(int $id): bool
+    {
+        $sql = "UPDATE videos SET imagem_path = NULL WHERE id = ?";
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(1, $id);
+        return $statement->execute();
+
+    }
+
     public function updateVideo(Video $video): bool
     {
         // teste para saber se foi a dcionado uma imagem no edita

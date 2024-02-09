@@ -9,5 +9,6 @@ return [
     'GET|/remover-video' => \Andre\Mvc\Controller\VideRemoveController::class,
     'GET|/login' => \Andre\Mvc\Controller\LoginFormController::class,
     'POST|/login' => \Andre\Mvc\Controller\LoginController::class,
-    'GET|/logout' => \Andre\Mvc\Controller\LogoutController::class
+    'GET|/logout' => \Andre\Mvc\Controller\LogoutController::class,
+    'GET|/remover-capa' => \Andre\Mvc\Controller\VideoRemoveCoverController::class
 ];
