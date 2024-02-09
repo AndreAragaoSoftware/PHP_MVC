@@ -8,6 +8,7 @@ use Andre\Mvc\Controller\LoginController;
 use Andre\Mvc\Controller\Controller;
 use Andre\Mvc\Controller\VideoEditController;
 use Andre\Mvc\Controller\VideoFormController;
+use Andre\Mvc\Controller\VideoJsonListController;
 use Andre\Mvc\Controller\VideoListController;
 use Andre\Mvc\Controller\VideoNewController;
 use Andre\Mvc\Controller\VideoRemoveCoverController;
@@ -57,7 +58,8 @@ if (array_key_exists($key, $routes)) {
                 VideoEditController::class,
                 VideoNewController::class,
                 VideRemoveController::class,
-                VideoRemoveCoverController::class
+                VideoRemoveCoverController::class,
+                VideoJsonListController::class
         ])) {
             $controller = new $controllerClass($videoRepository);
         } else {

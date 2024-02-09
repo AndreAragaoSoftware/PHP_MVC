@@ -10,5 +10,7 @@ return [
     'GET|/login' => \Andre\Mvc\Controller\LoginFormController::class,
     'POST|/login' => \Andre\Mvc\Controller\LoginController::class,
     'GET|/logout' => \Andre\Mvc\Controller\LogoutController::class,
-    'GET|/remover-capa' => \Andre\Mvc\Controller\VideoRemoveCoverController::class
+    'GET|/remover-capa' => \Andre\Mvc\Controller\VideoRemoveCoverController::class,
+    'GET|/videos-json' => \Andre\Mvc\Controller\VideoJsonListController::class,
+    'POST|/videos' => \Andre\Mvc\Controller\VideoNewJsonController::class
 ];
