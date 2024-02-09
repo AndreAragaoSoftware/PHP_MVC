@@ -17,20 +17,22 @@ class UserRepository
         $statement->execute();
 
         $userData = $statement->fetch(PDO::FETCH_ASSOC);
+        $correctPassword = password_verify($password, $userData['password'] ?? '');
 
-        // Verifica se encontrou o usuário
-        if ($userData) {
-            // Verifica se a senha está correta
-            if (password_verify($password, $userData['password'])) {
-                $_SESSION['logado'] = true;
-                // Senha correta, redireciona para a página principal
-                header('Location: /');
-            } else {
-                // Senha incorreta, redireciona de volta para a página de login com erro
-                header('Location: /login?sucesso=0');
-            }
+        // Garantido que o usuário terá o password com a encriptação mais recente
+        if (password_needs_rehash($userData['password'], PASSWORD_ARGON2ID)) {
+           $statement = $this->pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+           $statement->bindValue(1, password_hash($password, PASSWORD_ARGON2ID));
+           $statement->bindValue(2, $userData['id']);
+           $statement->execute();
+        }
+
+        // Verifica se tem acesso
+        if ($correctPassword) {
+            $_SESSION['logado'] = true;
+            header('Location: /');
         } else {
-            // Usuário não encontrado, redireciona de volta para a página de login com erro
+            // Sem autorização ou não encontrado
             header('Location: /login?sucesso=0');
         }
     }
