@@ -20,7 +20,7 @@ class VideoFormController extends ControllerWithHtml implements Controller
         if ($id !== false && $id !== null) {
             $video = $this->repository->oneVideo($id);
         }
-        $this->rederTemplete(
+        echo $this->rederTemplete(
             'video-form',
             ['video' => $video]
         );;

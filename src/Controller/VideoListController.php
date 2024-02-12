@@ -17,7 +17,7 @@ class VideoListController extends ControllerWithHtml implements Controller
     public function processaRequisicao(): void
     {
         $videoList = $this->videoRepository->allVideo();
-        $this->rederTemplete(
+        echo $this->rederTemplete(
             'video-list',
                         ['videoList' => $videoList]
         );
