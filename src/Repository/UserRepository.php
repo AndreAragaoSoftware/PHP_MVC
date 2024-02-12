@@ -2,10 +2,13 @@
 namespace Andre\Mvc\Repository;
 
 use Andre\Mvc\Entity\User;
+use Andre\Mvc\Helper\FlashMessageTrait;
 use PDO;
 
 class UserRepository
 {
+    // Puxando o código da Trait
+    use FlashMessageTrait;
     public function __construct(private PDO $pdo)
     {
     }
@@ -32,7 +35,7 @@ class UserRepository
             $_SESSION['logado'] = true;
             header('Location: /');
         } else {
-            $_SESSION['error_message'] = 'Usuário ou senha inválidos';
+            $this->addErrorMessage('Usuário ou senha inválidos');
             header('Location: /login');
         }
     }

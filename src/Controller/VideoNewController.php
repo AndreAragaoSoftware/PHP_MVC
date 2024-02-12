@@ -3,12 +3,14 @@
 namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Entity\Video;
+use Andre\Mvc\Helper\FlashMessageTrait;
 use Andre\Mvc\Repository\VideoRepository;
 use finfo;
 
 
 class VideoNewController implements Controller
 {
+    use FlashMessageTrait;
     public function __construct(private VideoRepository $videoRepository)
     {
     }
@@ -17,13 +19,13 @@ class VideoNewController implements Controller
     {
         $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
         if($url === false){
-            $_SESSION['error_message'] = 'URL  inválida';
+            $this->addErrorMessage('URL  inválida');
             header("Location: /novo-video");
             return;
         }
         $titulo = filter_input(INPUT_POST, 'titulo');
         if ($titulo === false){
-            $_SESSION['error_message'] = 'Título não informado';
+            $this->addErrorMessage('Título não informado');
             header("Location: /novo-video");
             return;
         }
@@ -52,7 +54,7 @@ class VideoNewController implements Controller
         }
 
         if ($this->videoRepository->addVideo($video) === false) {
-            $_SESSION['error_message'] = 'Erro ao inserir novo vídeo';
+            $this->addErrorMessage('Erro ao inserir novo vídeo');
             header("Location: /novo-video");
         } else {
             header("Location: /?sucesso=1");
