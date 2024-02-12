@@ -3,10 +3,12 @@
 namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Entity\Video;
+use Andre\Mvc\Helper\HtmlRendererTrait;
 use Andre\Mvc\Repository\VideoRepository;
 
-class VideoFormController extends ControllerWithHtml implements Controller
+class VideoFormController  implements Controller
 {
+    use HtmlRendererTrait;
     public function __construct(private VideoRepository $repository)
     {
 

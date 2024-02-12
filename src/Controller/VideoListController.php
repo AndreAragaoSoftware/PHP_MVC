@@ -2,12 +2,13 @@
 
 namespace Andre\Mvc\Controller;
 
+use Andre\Mvc\Helper\HtmlRendererTrait;
 use Andre\Mvc\Repository\VideoRepository;
 
 
-class VideoListController extends ControllerWithHtml implements Controller
+class VideoListController implements Controller
 {
-
+    use HtmlRendererTrait;
 
     public function __construct(private VideoRepository $videoRepository)
     {

@@ -2,8 +2,11 @@
 
 namespace Andre\Mvc\Controller;
 
-class LoginFormController extends ControllerWithHtml implements Controller
+use Andre\Mvc\Helper\HtmlRendererTrait;
+
+class LoginFormController  implements Controller
 {
+    use HtmlRendererTrait;
     public function processaRequisicao(): void
     {
         // Se já estiver logado
