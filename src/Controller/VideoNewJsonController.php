@@ -7,14 +7,15 @@ use Andre\Mvc\Repository\VideoRepository;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class VideoNewJsonController implements Controller
+class VideoNewJsonController implements RequestHandlerInterface
 {
     public function __construct(private VideoRepository $videoRepository)
     {
     }
 
-    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
 {
     //pegando os dados
     $request = $request->getBody()->getContents();

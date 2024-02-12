@@ -15,6 +15,7 @@ use Andre\Mvc\Controller\VideoRemoveCoverController;
 use Andre\Mvc\Controller\VideRemoveController;
 use Andre\Mvc\Repository\UserRepository;
 use Andre\Mvc\Repository\VideoRepository;
+use Psr\Http\Server\RequestHandlerInterface;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -73,8 +74,8 @@ if (array_key_exists($key, $routes)) {
         $controller = new Error404Controller();
     }
 
-    /** @var Controller $controller */
-    $response = $controller->processaRequisicao($request);
+    /** @var RequestHandlerInterface $controller */
+    $response = $controller->handle($request);
 
     http_response_code($response->getStatusCode());
     foreach ($response->getHeaders() as $name => $values) {
@@ -86,5 +87,5 @@ if (array_key_exists($key, $routes)) {
     echo $response->getBody();
 } else {
     $controller = new Error404Controller();
-    $controller->processaRequisicao($request);
+    $controller->handle($request);
 }

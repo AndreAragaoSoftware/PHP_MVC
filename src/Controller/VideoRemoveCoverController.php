@@ -7,8 +7,9 @@ use Andre\Mvc\Repository\VideoRepository;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class VideoRemoveCoverController implements Controller
+class VideoRemoveCoverController implements RequestHandlerInterface
 {
     use FlashMessageTrait;
 
@@ -16,7 +17,7 @@ class VideoRemoveCoverController implements Controller
     {
     }
 
-    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $id = $_GET['id'];
 

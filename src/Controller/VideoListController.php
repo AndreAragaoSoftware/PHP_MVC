@@ -7,9 +7,10 @@ use Andre\Mvc\Repository\VideoRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Nyholm\Psr7\Response;
+use Psr\Http\Server\RequestHandlerInterface;
 
 
-class VideoListController implements Controller
+class VideoListController implements RequestHandlerInterface
 {
     use HtmlRendererTrait;
 
@@ -18,7 +19,7 @@ class VideoListController implements Controller
 
     }
 
-    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $videoList = $this->videoRepository->allVideo();
         $html =  $this->rederTemplete(
