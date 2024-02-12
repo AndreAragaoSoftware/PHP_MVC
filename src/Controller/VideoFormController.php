@@ -5,7 +5,7 @@ namespace Andre\Mvc\Controller;
 use Andre\Mvc\Entity\Video;
 use Andre\Mvc\Repository\VideoRepository;
 
-class VideoFormController implements Controller
+class VideoFormController extends ControllerWithHtml implements Controller
 {
     public function __construct(private VideoRepository $repository)
     {
@@ -20,6 +20,10 @@ class VideoFormController implements Controller
         if ($id !== false && $id !== null) {
             $video = $this->repository->oneVideo($id);
         }
-        require_once __DIR__ . '/../../views/video-form.php';
+        $this->rederTemplete(
+            'video-form',
+            ['video' => $video]
+        );;
+
     }
 }

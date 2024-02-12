@@ -2,7 +2,7 @@
 
 namespace Andre\Mvc\Controller;
 
-class LoginFormController implements Controller
+class LoginFormController extends ControllerWithHtml implements Controller
 {
     public function processaRequisicao(): void
     {
@@ -12,6 +12,6 @@ class LoginFormController implements Controller
             return;
         }
 
-        require_once __DIR__ . '/../../views/login-form.php';
+        $this->rederTemplete('login-form');
     }
 }

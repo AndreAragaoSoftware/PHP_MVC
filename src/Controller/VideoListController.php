@@ -5,7 +5,7 @@ namespace Andre\Mvc\Controller;
 use Andre\Mvc\Repository\VideoRepository;
 
 
-class VideoListController implements Controller
+class VideoListController extends ControllerWithHtml implements Controller
 {
 
 
@@ -17,7 +17,10 @@ class VideoListController implements Controller
     public function processaRequisicao(): void
     {
         $videoList = $this->videoRepository->allVideo();
-        require_once __DIR__ . '/../../views/video-list.php';
+        $this->rederTemplete(
+            'video-list',
+                        ['videoList' => $videoList]
+        );
 
     }
 }
