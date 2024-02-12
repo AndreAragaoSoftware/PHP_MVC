@@ -2,22 +2,40 @@
 
 namespace Andre\Mvc\Controller;
 
+use Andre\Mvc\Helper\FlashMessageTrait;
 use Andre\Mvc\Repository\VideoRepository;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class VideRemoveController implements Controller
 {
+    use FlashMessageTrait;
     public function __construct(private VideoRepository $videoRepository)
     {
 
     }
-    public function processaRequisicao(): void
+
+    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
     {
-        $id = $_GET['id'];
+        $queryParams = $request->getQueryParams();
+        $id = filter_var($queryParams['id'], FILTER_VALIDATE_INT);
+        if ($id === null || $id=== false){
+            $this->addErrorMessage('ID inválido');
+            return new Response(302, [
+                'Location' => '/'
+            ]);
+        }
 
         if ($this->videoRepository->removeVideo($id) === false) {
-            header('Location: /?sucesso=0');
+            $this->addErrorMessage('Erro ao remover vídeo');
+            return new Response(302, [
+                'Location' => '/'
+            ]);
         } else {
-            header('Location: /?sucesso=1');
+            return new Response(302, [
+                'Location' => '/'
+            ]);
         }
     }
 

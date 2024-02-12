@@ -7,6 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInitf8c0056c282ae226629805fe48aca0fc
 {
     public static $prefixLengthsPsr4 = array (
+        'P' => 
+        array (
+            'Psr\\Http\\Message\\' => 17,
+        ),
+        'N' => 
+        array (
+            'Nyholm\\Psr7\\' => 12,
+        ),
         'A' => 
         array (
             'Andre\\Mvc\\' => 10,
@@ -14,6 +22,15 @@ class ComposerStaticInitf8c0056c282ae226629805fe48aca0fc
     );
 
     public static $prefixDirsPsr4 = array (
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+        ),
+        'Nyholm\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nyholm/psr7/src',
+        ),
         'Andre\\Mvc\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
