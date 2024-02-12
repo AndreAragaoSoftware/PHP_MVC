@@ -4,6 +4,9 @@ namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Entity\Video;
 use Andre\Mvc\Repository\VideoRepository;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class VideoNewJsonController implements Controller
 {
@@ -11,16 +14,16 @@ class VideoNewJsonController implements Controller
     {
     }
 
-    public function processaRequisicao(): void
+    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
 {
     //pegando os dados
-    $request = file_get_contents('php://input');
+    $request = $request->getBody()->getContents();
     // tranformando em array
-    $videoData = json_encode($request, true);
+    $videoData = json_decode($request, true);
     $video = new Video($videoData['url'], $videoData['title']);
     $this->videoRepository->allVideo($video);
 
     // Rseposta criado
-    http_response_code(201);
+    return new Response(201);
 }
 }

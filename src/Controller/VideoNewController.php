@@ -6,6 +6,9 @@ use Andre\Mvc\Entity\Video;
 use Andre\Mvc\Helper\FlashMessageTrait;
 use Andre\Mvc\Repository\VideoRepository;
 use finfo;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 
 class VideoNewController implements Controller
@@ -15,19 +18,15 @@ class VideoNewController implements Controller
     {
     }
 
-    public function processaRequisicao(): void
+    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
     {
-        $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
-        if($url === false){
-            $this->addErrorMessage('URL  inválida');
-            header("Location: /novo-video");
-            return;
-        }
-        $titulo = filter_input(INPUT_POST, 'titulo');
-        if ($titulo === false){
-            $this->addErrorMessage('Título não informado');
-            header("Location: /novo-video");
-            return;
+        $postData = $request->getParsedBody();
+        $url = filter_var($postData['url'], FILTER_VALIDATE_URL);
+        $titulo = filter_var($postData['titulo']);
+
+        if ($url === false || $titulo === false) {
+            $this->addErrorMessage('URL ou título inválido');
+            return new Response(400, [], 'URL ou título inválido');
         }
         $video  = new Video($url, $titulo);
 
@@ -55,9 +54,13 @@ class VideoNewController implements Controller
 
         if ($this->videoRepository->addVideo($video) === false) {
             $this->addErrorMessage('Erro ao inserir novo vídeo');
-            header("Location: /novo-video");
+            return new Response(302,
+                ['Location' => '/novo-video']
+            );
         } else {
-            header("Location: /?sucesso=1");
+            return new Response(302,
+                ['Location' => '/']
+            );
         }
 
     }

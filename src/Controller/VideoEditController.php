@@ -3,64 +3,77 @@
 namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Entity\Video;
+use Andre\Mvc\Helper\FlashMessageTrait;
 use Andre\Mvc\Repository\VideoRepository;
 use finfo;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 class VideoEditController implements Controller
 {
-    public function __construct(private VideoRepository $videoRepository)
-    {
+    use FlashMessageTrait;
 
+    private VideoRepository $videoRepository;
+
+    public function __construct(VideoRepository $videoRepository)
+    {
+        $this->videoRepository = $videoRepository;
     }
 
-    public function processaRequisicao(): void
+    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
     {
-        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        if ($id === false || $id === null) {
-            header('Location: /?sucesso=0');
-            exit();
+        $queryParams = $request->getQueryParams();
+        $id = filter_var($queryParams['id'], FILTER_VALIDATE_INT);
+
+        if ($id === null || $id === false) {
+            $this->addErrorMessage('ID inválido');
+            return new Response(302, [], 'ID inválido');
         }
 
-        $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
-        if ($url === false) {
-            header('Location: /?sucesso=0');
-            exit();
-        }
-        $titulo = filter_input(INPUT_POST, 'titulo');
-        if ($titulo === false) {
-            header('Location: /?sucesso=0');
-            exit();
+        $postData = $request->getParsedBody();
+        $url = filter_var($postData['url'], FILTER_VALIDATE_URL);
+        $titulo = filter_var($postData['titulo']);
+
+
+        if ($url === false || $titulo === false) {
+            $this->addErrorMessage('URL ou título inválido');
+            return new Response(302, [], 'URL ou título inválido');
         }
 
+        // Atualiza os dados do vídeo com os valores fornecidos
         $video = new Video($url, $titulo);
         $video->setId($id);
 
-        // teste para saber se a imagem foi enviada
-        if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            // Pegando o nome temporário do arquivo
-            $tempFileName = $_FILES['image']['tmp_name'];
 
-            // Verifica se o arquivo é de imagem
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            $mineType = $finfo->file($tempFileName);
+        $files = $request->getUploadedFiles();
+        /** @var UploadedFileInterface $uploadedImage */
+        $uploadedImage = $files['image'];
+        if ($uploadedImage->getError() === UPLOAD_ERR_OK) {
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $tmpFile = $uploadedImage->getStream()->getMetadata('uri');
+            $mimeType = $finfo->file($tmpFile);
 
-
-
-            if (str_starts_with($mineType, 'image/')) {
-                $safeFileName = uniqid('Upload_') . pathinfo($_FILES['image']['name'], PATHINFO_BASENAME);
-                // refica se o arquivo foi enviado pelo formulário e move
-                move_uploaded_file(
-                    $_FILES['image']['tmp_name'],
-                    __DIR__ . '/../../public/img/uploads/' . $safeFileName
-                );
+            if (str_starts_with($mimeType, 'image/')) {
+                $safeFileName = uniqid('upload_') . '_' . pathinfo($uploadedImage->getClientFilename(), PATHINFO_BASENAME);
+                $uploadedImage->moveTo(__DIR__ . '/../../public/img/uploads/' . $safeFileName);
                 $video->setFilePath($safeFileName);
             }
         }
 
-        if ($this->videoRepository->updateVideo($video)) {
-            header('Location: /?sucesso=0');
-        } else {
-            header('Location: /?sucesso=1');
+        $success = $this->videoRepository->updateVideo($video);
+        if ($success === false) {
+            $this->addErrorMessage('Erro ao atualizar o vídeo');
+            return new Response(302, [
+                'Location' => '/'
+            ]);
         }
+
+        return new Response(302, [
+            'Location' => '/'
+        ]);
     }
+
+
 }

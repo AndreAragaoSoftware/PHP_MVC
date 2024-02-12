@@ -31,9 +31,17 @@ class VideoRepository
         $sql = 'DELETE FROM videos WHERE id = ?';
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(1, $id);
-        return $statement->execute();
-    }
 
+        try {
+            return $statement->execute();
+        } catch (\PDOException $e) {
+            // Tratar o erro de alguma forma, como registrar ou lançar novamente
+            // Por exemplo:
+            // error_log('Erro ao remover vídeo: ' . $e->getMessage());
+            // throw new \RuntimeException('Erro ao remover vídeo: ' . $e->getMessage());
+            return false;
+        }
+    }
     public function removeCover(int $id): bool
     {
         // Primeiro, recuperamos o caminho do arquivo de imagem associado ao vídeo
@@ -91,6 +99,7 @@ class VideoRepository
         }
 
         return $statement->execute();
+
     }
 
     /** @return Video[] */

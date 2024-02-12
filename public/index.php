@@ -30,16 +30,19 @@ $routes = require_once __DIR__ . '/../config/routes.php';
 $pathInfo = $_SERVER['PATH_INFO'] ?? '/';
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 
+// Criação do objeto de requisição usando o ServerRequestCreator
+$psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+$creator = new \Nyholm\Psr7Server\ServerRequestCreator(
+    $psr17Factory, // ServerRequestFactory
+    $psr17Factory, // UriFactory
+    $psr17Factory, // UploadedFileFactory
+    $psr17Factory  // StreamFactory
+);
+$request = $creator->fromGlobals();
+
 // Login
 session_start();
-if (isset($_SESSION['logado'])) {
-    $originalInfo = $_SESSION['logado'];
-    unset($_SESSION['logado']);
-    session_regenerate_id();
-    $_SESSION['logado'] = $originalInfo;
-}
-$isLoginRoter =  $pathInfo === '/login';
-if (!array_key_exists('logado', $_SESSION) && !$isLoginRoter ) {
+if (!isset($_SESSION['logado']) && $pathInfo !== '/login') {
     header('Location: /login');
     return;
 }
@@ -53,13 +56,13 @@ if (array_key_exists($key, $routes)) {
         if ($controllerClass === UserRepository::class || $controllerClass === LoginController::class) {
             $controller = new $controllerClass($userRepository);
         } elseif (in_array($controllerClass, [
-                VideoListController::class,
-                VideoFormController::class,
-                VideoEditController::class,
-                VideoNewController::class,
-                VideRemoveController::class,
-                VideoRemoveCoverController::class,
-                VideoJsonListController::class
+            VideoListController::class,
+            VideoFormController::class,
+            VideoEditController::class,
+            VideoNewController::class,
+            VideRemoveController::class,
+            VideoRemoveCoverController::class,
+            VideoJsonListController::class
         ])) {
             $controller = new $controllerClass($videoRepository);
         } else {
@@ -71,8 +74,17 @@ if (array_key_exists($key, $routes)) {
     }
 
     /** @var Controller $controller */
-    $controller->processaRequisicao();
+    $response = $controller->processaRequisicao($request);
+
+    http_response_code($response->getStatusCode());
+    foreach ($response->getHeaders() as $name => $values) {
+        foreach ($values as $value) {
+            header (sprintf('%s: %s', $name, $value), false);
+        }
+    }
+
+    echo $response->getBody();
 } else {
     $controller = new Error404Controller();
-    $controller->processaRequisicao();
+    $controller->processaRequisicao($request);
 }

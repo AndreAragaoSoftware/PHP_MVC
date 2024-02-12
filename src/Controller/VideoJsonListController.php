@@ -4,6 +4,9 @@ namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Entity\Video;
 use Andre\Mvc\Repository\VideoRepository;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class VideoJsonListController implements Controller
 {
@@ -11,7 +14,7 @@ class VideoJsonListController implements Controller
     {
     }
 
-    public function processaRequisicao(): void
+    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
     {
         $videoList = array_map(function (Video $video): array{
             return [
@@ -21,6 +24,9 @@ class VideoJsonListController implements Controller
 
             ];
         },$this->videoRepository->allVideo());
-        echo json_encode($videoList);
+        return new  Response(200, [
+            'Content-type' => 'application/json'
+
+        ], json_encode($videoList));
     }
 }

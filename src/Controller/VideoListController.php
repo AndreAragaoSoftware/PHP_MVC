@@ -4,6 +4,9 @@ namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Helper\HtmlRendererTrait;
 use Andre\Mvc\Repository\VideoRepository;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Nyholm\Psr7\Response;
 
 
 class VideoListController implements Controller
@@ -15,13 +18,16 @@ class VideoListController implements Controller
 
     }
 
-    public function processaRequisicao(): void
+    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
     {
         $videoList = $this->videoRepository->allVideo();
-        echo $this->rederTemplete(
+        $html =  $this->rederTemplete(
             'video-list',
                         ['videoList' => $videoList]
         );
+
+        // Cria uma nova instância de Response com o HTML renderizado
+        return new Response(body: $html);
 
     }
 }

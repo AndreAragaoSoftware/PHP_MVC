@@ -3,6 +3,7 @@ namespace Andre\Mvc\Repository;
 
 use Andre\Mvc\Entity\User;
 use Andre\Mvc\Helper\FlashMessageTrait;
+use Nyholm\Psr7\Response;
 use PDO;
 
 class UserRepository
@@ -34,9 +35,11 @@ class UserRepository
         if ($correctPassword) {
             $_SESSION['logado'] = true;
             header('Location: /');
+            exit(); // Garante que o script pare de ser executado após o redirecionamento
         } else {
-            $this->addErrorMessage('Usuário ou senha inválidos');
+            $_SESSION['error_message'] = 'Usuário ou senha inválidos';
             header('Location: /login');
+            exit(); // Garante que o script pare de ser executado após o redirecionamento
         }
     }
 

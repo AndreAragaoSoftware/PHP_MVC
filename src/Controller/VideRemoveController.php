@@ -33,7 +33,7 @@ class VideRemoveController implements Controller
                 'Location' => '/'
             ]);
         } else {
-            return new Response(302, [
+            return new Response(200, [
                 'Location' => '/'
             ]);
         }

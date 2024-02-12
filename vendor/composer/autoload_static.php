@@ -14,6 +14,7 @@ class ComposerStaticInitf8c0056c282ae226629805fe48aca0fc
         'N' => 
         array (
             'Nyholm\\Psr7\\' => 12,
+            'Nyholm\\Psr7Server\\' => 18,
         ),
         'A' => 
         array (
@@ -24,12 +25,16 @@ class ComposerStaticInitf8c0056c282ae226629805fe48aca0fc
     public static $prefixDirsPsr4 = array (
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Nyholm\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/nyholm/psr7/src',
+        ),
+        'Nyholm\\Psr7Server\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nyholm/psr7-server/src',
         ),
         'Andre\\Mvc\\' => 
         array (
