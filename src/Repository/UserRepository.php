@@ -32,8 +32,8 @@ class UserRepository
             $_SESSION['logado'] = true;
             header('Location: /');
         } else {
-            // Sem autorização ou não encontrado
-            header('Location: /login?sucesso=0');
+            $_SESSION['error_message'] = 'Usuário ou senha inválidos';
+            header('Location: /login');
         }
     }
 
