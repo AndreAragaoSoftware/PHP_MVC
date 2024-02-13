@@ -3,8 +3,8 @@
 namespace Andre\Mvc\Controller;
 
 use Andre\Mvc\Entity\Video;
-use Andre\Mvc\Helper\HtmlRendererTrait;
 use Andre\Mvc\Repository\VideoRepository;
+use League\Plates\Engine;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,8 +12,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class VideoFormController  implements RequestHandlerInterface
 {
-    use HtmlRendererTrait;
-    public function __construct(private VideoRepository $repository)
+    public function __construct(
+        private VideoRepository $repository,
+        private Engine $templates
+    )
     {
 
     }
@@ -29,7 +31,7 @@ class VideoFormController  implements RequestHandlerInterface
         }
 
         // Renderiza o formulário de vídeo e inclui os dados do vídeo no contexto
-        $html = $this->rederTemplete('video-form', ['video' => $video]);
+        $html = $this->templates->render('video-form', ['video' => $video]);
 
         // Retorna a resposta com o HTML renderizado
         return new Response(

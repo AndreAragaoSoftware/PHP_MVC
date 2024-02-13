@@ -2,7 +2,7 @@
 
 use Andre\Mvc\Entity\Video;
 
-require_once __DIR__ . '/inicio-html.php';
+$this->insert('inicio-html');
 /** @var Video|null $video */
 ?>
     <main class="container">
@@ -43,4 +43,4 @@ require_once __DIR__ . '/inicio-html.php';
     </main>
 
 <?php
-require_once __DIR__ . '/fim-html.php';
+$this->insert('fim-html');

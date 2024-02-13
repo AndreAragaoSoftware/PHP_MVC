@@ -14,6 +14,10 @@ $buider->addDefinitions([
     },
     UserRepository::class => DI\autowire(),
     VideoRepository::class => DI\autowire(),
+    \League\Plates\Engine::class => function () {
+        $templatePath = __DIR__ . '/../views';
+        return new \League\Plates\Engine($templatePath);
+    }
 ]);
 
 /** @var ContainerInterface $container */
