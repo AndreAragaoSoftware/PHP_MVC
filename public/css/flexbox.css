@@ -29,12 +29,12 @@
 /* grid vídeos */
 
 .descricao-video {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     display: grid;
     text-align: center;
     column-gap: 1rem;
     row-gap: 10px;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto;
 }
 
 .descricao-video img {
@@ -42,8 +42,8 @@
 }
 
 .descricao-video h3 {
-    grid-area: 1 / 2 / 2 / 3;
     font-weight: 700;
+    font-size: larger;
     color: #444444;
 }
 
@@ -54,6 +54,7 @@
 
 .descricao-video .acoes-video a {
     text-decoration: underline;
+    margin: 5px;
 }
 
 .descricao-video img {
