@@ -25,6 +25,3 @@
 
     </main>
 
-<?php
-$this->insert('fim-html');
-?>

@@ -1,12 +1,10 @@
 <?php
-
+// Chamando o arquivo layout.php
+$this->layout('layout');
 use Andre\Mvc\Entity\Video;
 
-$this->insert('inicio-html');
 /** @var Video $videoList  */
 ?>
-
-
 
     <ul class="videos__container">
         <?php foreach ($videoList as $video): ?>
@@ -35,4 +33,4 @@ $this->insert('inicio-html');
             </li>
         <?php endforeach; ?>
     </ul>
-<?php $this->insert('fim-html');
+

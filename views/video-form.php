@@ -1,8 +1,9 @@
 <?php
+// Chamando o arquivo layout.php
+$this->layout('layout');
 
 use Andre\Mvc\Entity\Video;
 
-$this->insert('inicio-html');
 /** @var Video|null $video */
 ?>
     <main class="container">
@@ -42,5 +43,3 @@ $this->insert('inicio-html');
         </form>
     </main>
 
-<?php
-$this->insert('fim-html');
